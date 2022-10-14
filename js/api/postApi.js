@@ -21,6 +21,18 @@ const postApi = {
     const url = `/posts/${id}`;
     return axiosClient.delete(url);
   },
+  addFormData(data) {
+    const url = `with-thumbnail/post/`;
+    return axiosClient.post(url, data, {
+      header: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+  updateFormData(data) {
+    const url = `with-thumbnail/post/${data.get('id')}`;
+    return axiosClient.patch(url, data, {
+      header: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
 };
 
 export default postApi;

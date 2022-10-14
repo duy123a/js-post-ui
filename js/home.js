@@ -1,11 +1,10 @@
 import postApi from './api/postApi';
-import { initPagination, initSearch, renderPagination, renderPostList } from './utils/';
+import { initPagination, initSearch, renderPagination, renderPostList, toast } from './utils/';
 
 async function handleFilterChange(filterName, filterValue) {
   try {
     const url = new URL(window.location);
-    url.searchParams.set(filterName, filterValue);
-
+    if (filterName) url.searchParams.set(filterName, filterValue);
     // reset page if needed
     if (filterName === 'title_like') url.searchParams.set('_page', 1);
 
@@ -19,6 +18,24 @@ async function handleFilterChange(filterName, filterValue) {
   }
 }
 
+function registerPostDeleteEvent() {
+  document.addEventListener('post-delete', async (event) => {
+    try {
+      const post = event.detail;
+      const message = `Are you sure to remove post ${post.title}?`;
+      // TODO: Use Bootstraps modal instead
+      if (window.confirm(message)) {
+        await postApi.remove(post.id);
+        await handleFilterChange();
+        toast.success('Remove post successfully');
+      }
+    } catch (error) {
+      console.log('failed to remove post', error);
+      toast.error('Fail to remove post');
+    }
+  });
+}
+
 (async () => {
   try {
     // set default params if null
@@ -27,6 +44,8 @@ async function handleFilterChange(filterName, filterValue) {
     if (!url.searchParams.get('_limit')) url.searchParams.set('_limit', 6);
     history.pushState({}, '', url);
     const queryParams = url.searchParams;
+
+    registerPostDeleteEvent();
 
     // attach click event for links
     initPagination({
@@ -44,10 +63,11 @@ async function handleFilterChange(filterName, filterValue) {
 
     // render post list
     // const queryParams = new URLSearchParams(window.location.search);
-    const { data, pagination } = await postApi.getAll(queryParams);
-    console.log(data);
-    renderPostList('postList', data);
-    renderPagination('pagination', pagination);
+    // const { data, pagination } = await postApi.getAll(queryParams);
+    // console.log(data);
+    // renderPostList('postList', data);
+    // renderPagination('pagination', pagination);
+    handleFilterChange();
   } catch (error) {
     console.log('home.js main function error', error);
   }

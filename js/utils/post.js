@@ -35,8 +35,34 @@ function createPostElement(post) {
     // go to post detail when click on div.post-item
     const divElement = liElement.firstElementChild;
     if (divElement) {
-      divElement.addEventListener('click', () => {
+      divElement.addEventListener('click', (event) => {
+        // if event triggered from menu -> ignore
+        const menu = liElement.querySelector('[data-id="menu"]');
+        if (menu && menu.contains(event.target)) return;
+
         window.location.assign(`/post-detail.html?id=${post.id}`);
+      });
+    }
+
+    // add click event to edit button
+    const editButton = liElement.querySelector('[data-id="edit"]');
+    if (editButton) {
+      editButton.addEventListener('click', (event) => {
+        // prevent event bubbling to parent (don't use it when using analytics!)
+        // event.stopPropagation();
+        window.location.assign(`/add-edit-post.html?id=${post.id}`);
+      });
+    }
+
+    // add remove event to remove button
+    const removeButton = liElement.querySelector('[data-id="remove"]');
+    if (removeButton) {
+      removeButton.addEventListener('click', (event) => {
+        const customEvent = new CustomEvent('post-delete', {
+          bubbles: true,
+          detail: post,
+        });
+        removeButton.dispatchEvent(customEvent);
       });
     }
 
