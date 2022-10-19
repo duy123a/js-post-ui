@@ -145,7 +145,7 @@ function initRandomImg(form) {
   randomButton.addEventListener('click', () => {
     // random id
     // build URL
-    const imageUrl = `https://picsum.photos/id/${randomNumber(1000)}/1368/800`;
+    const imageUrl = `https://picsum.photos/id/${randomNumber(1000)}/1368/400`;
     // set imageURL input & background
     setFieldValue(form, '[name=imageUrl]', imageUrl);
     setBackgroundImage(document, '#postHeroImage', imageUrl);

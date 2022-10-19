@@ -22,15 +22,15 @@ const postApi = {
     return axiosClient.delete(url);
   },
   addFormData(data) {
-    const url = `with-thumbnail/post/`;
+    const url = `with-thumbnail/posts/`;
     return axiosClient.post(url, data, {
-      header: { 'Content-Type': 'multipart/form-data' },
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
   updateFormData(data) {
-    const url = `with-thumbnail/post/${data.get('id')}`;
+    const url = `with-thumbnail/posts/${data.get('id')}`;
     return axiosClient.patch(url, data, {
-      header: { 'Content-Type': 'multipart/form-data' },
+      headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
 };

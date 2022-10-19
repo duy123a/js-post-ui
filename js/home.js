@@ -11,8 +11,8 @@ async function handleFilterChange(filterName, filterValue) {
     history.pushState({}, '', url);
 
     const { data, pagination } = await postApi.getAll(url.searchParams);
-    renderPostList(data);
-    renderPagination(pagination);
+    renderPostList('postList', data);
+    renderPagination('pagination', pagination);
   } catch (error) {
     console.log('handleFilterChange function fail', error);
   }
